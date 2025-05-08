@@ -6,7 +6,7 @@ def retrieve_tool():
     retriever = doc_store.as_retriever(search_type="similarity", search_kwargs={"k": 3,})
     retriever_tool = create_retriever_tool(
     retriever,
-    "samsung_mobile_search",
+    "VectorDB_search",
     "Use this tool when you need to answer questions about Samsung mobile phones, including their features, settings, or troubleshooting. For example: how to enable dark mode, battery saving tips, or camera settings.",)
     return retriever_tool
 def calculator_tool():

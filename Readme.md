@@ -1,3 +1,13 @@
+---
+title: MultiDoc-RAG-Agent
+emoji: 💻
+colorFrom: blue
+colorTo: yellow
+sdk: gradio
+sdk_version: 5.28.0
+app_file: gradio_demo.py
+pinned: false
+---
 # MultiDoc-RAG-Agent
 
 ## Overview

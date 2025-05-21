@@ -15,58 +15,97 @@ The MultiDoc-RAG-Agent is a Retrieval-Augmented Generation (RAG) system designed
 
 ## Components
 
-### 1. Agents
-- **File**: `agents.py`
-- **Description**: Defines the `rag_agent` function, which creates a tool-calling agent using a language model, tools, and a prompt. The agent is responsible for orchestrating interactions between the user, tools, and the language model to generate accurate and contextually relevant responses.
+### 1. Agents (`agents.py`)
+- Creates a tool-calling agent using LangChain
+- Combines the language model, retrieval tools, and prompt templates
+- Serves as the core decision-making component that decides when to use tools
 
-### 2. Main Application
-- **File**: `main.py`
-- **Description**: Implements a command-line interface for interacting with the RAG agent. It processes user queries, maintains a chat history, and ensures seamless communication between the user and the agent. This serves as the entry point for users to interact with the system.
+### 2. Main Application (`main.py`)
+- Provides a command-line interface for interacting with the RAG agent
+- Maintains conversation history for contextual understanding
+- Processes user queries and displays responses in a continuous loop
 
-### 3. Prompts
-- **File**: `prompts.py`
-- **Description**: Contains functions to generate prompts for the agent and retriever using templates and a hub-pulled prompt. These prompts guide the language model in understanding the context and generating appropriate responses.
+### 3. Prompts (`prompts.py`)
+- Defines templates for structuring interactions with the language model
+- Uses both custom templates and pre-configured prompts from LangChain Hub
+- Ensures consistent formatting of retrieved context and queries
 
-### 4. Query Vector Database
-- **File**: `query_vectordb.py`
-- **Description**: Handles vector database interactions, initializes chat models, and provides a function to retrieve documents based on similarity. This component ensures efficient and accurate retrieval of relevant documents from the vector database.
+### 4. Query Vector Database (`query_vectordb.py`)
+- Initializes language models (Mistral-SABA-24B and Llama-3.3-70B)
+- Manages connections to the Qdrant vector database
+- Provides document retrieval functionality based on semantic similarity
 
-### 5. Document Storage
-- **File**: `store2db.py`
-- **Description**: Loads PDF documents, splits them into smaller chunks, and stores them in a Qdrant vector database. This enables the system to handle large documents and retrieve specific sections relevant to user queries.
+### 5. Document Storage (`store2db.py`)
+- Handles document ingestion from PDF files (Samsung device manuals)
+- Splits documents into semantic chunks for better retrieval
+- Creates vector embeddings using Sentence Transformers
+- Stores embeddings in Qdrant for fast similarity search
 
-### 6. Tools
-- **File**: `tools.py`
-- **Description**: Defines tools for the agent, including a retriever tool for Samsung mobile-related queries and a calculator tool. These tools extend the agent's capabilities, allowing it to perform specialized tasks.
+### 6. Tools (`tools.py`)
+- Defines specialized tools for the agent:
+  - Retriever tool for Samsung mobile documentation
+  - Calculator tool for handling mathematical operations
+- Configures tool descriptions to help the agent decide when to use them
+
+### 7. Web Interface (`gradio_demo.py`)
+- Creates an interactive web UI using Gradio
+- Processes user inputs and displays formatted agent responses
+- Shows tool usage and intermediate steps for transparency
+- Provides example queries to demonstrate system capabilities
 
 ## How to Use
 
 ### 1. Setup
-- Ensure all dependencies are installed.
-- Configure environment variables in a `.env` file. For example:
-  - `GROQ_API_KEY`: API key for the language model.
-  - `QDRANT_URL`: URL for the Qdrant vector database.
-  - `QDRANT_API_KEY`: API key for the Qdrant vector database.
+- Ensure all dependencies are installed:
+  ```bash
+  pip install -r requirements.txt
+  ```
+- Configure environment variables in a `.env` file:
+  ```
+  GROQ_API_KEY=your_groq_api_key
+  QDRANT_URL=your_qdrant_url
+  QDRANT_API_KEY=your_qdrant_api_key
+  ```
 
 ### 2. Run the Application
-- Execute `main.py` to start the command-line interface.
-- Enter queries to interact with the agent and retrieve intelligent responses.
+- For command-line interface:
+  ```bash
+  python main.py
+  ```
+- For web interface:
+  ```bash
+  python gradio_demo.py
+  ```
 
 ### 3. Document Storage
-- Use `store2db.py` to load and store documents in the vector database. This step is essential for preparing the system to handle user queries effectively.
+- To ingest new documents or update the vector database:
+  ```bash
+  python store2db.py
+  ```
+- Current documents include Samsung device manuals (A16, S25, Fold)
+
+### 4. Docker Deployment
+- Build and run using Docker:
+  ```bash
+  docker build -t multidoc-rag-agent .
+  docker run -p 7860:7860 multidoc-rag-agent
+  ```
+- Access the web interface at http://localhost:7860
 
 ## Dependencies
-- **Python**: The primary programming language used for the project.
-- **LangChain**: A framework for building applications with language models.
-- **Qdrant**: A vector database for storing and retrieving document embeddings.
-- **HuggingFace**: A library for natural language processing and machine learning models.
-- **dotenv**: A library for managing environment variables.
+- **Python**: The primary programming language used for the project
+- **LangChain**: Framework for building applications with language models
+- **Groq**: API provider for accessing powerful language models
+- **Qdrant**: Vector database for storing and retrieving document embeddings
+- **Sentence Transformers**: Library for creating document embeddings
+- **Gradio**: Framework for creating web interfaces for machine learning models
 
 ## Example Use Case
-1. A user queries the system about a specific topic related to Samsung mobile devices.
-2. The agent retrieves relevant documents from the vector database using `query_vectordb.py`.
-3. The language model processes the retrieved documents and generates a coherent response.
-4. The user receives an intelligent and contextually accurate answer.
+1. A user queries the system about configuring dark mode on their Samsung S25
+2. The agent identifies this as a documentation retrieval task
+3. The retrieval tool fetches relevant passages from the S25 manual
+4. The language model generates a clear, step-by-step response
+5. The user receives accurate instructions with context from the official manual
 
 ## License
 This project is licensed under the MIT License.

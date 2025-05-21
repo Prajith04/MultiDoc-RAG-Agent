@@ -1,3 +1,10 @@
+# .gitignore - Specifies files and directories to exclude from Git version control
+#
+# This file lists patterns for files and directories that should not be tracked:
+# - .venv/: Python virtual environment directory
+# - .env: Environment variables file (contains secrets)
+# - __pycache__/: Python bytecode cache directories
+
 .venv
 .env
 __pycache__/
